@@ -63,6 +63,9 @@ td select{min-width:120px;padding:8px}
 .photo-preview img{width:90px;height:75px;object-fit:cover;border-radius:7px}
 hr{border:0;border-top:1px solid var(--borda);margin:17px 0}
 footer{text-align:center;color:var(--cinza);font-size:12px;padding:20px}
+#botaoVoltarInicio{position:fixed;right:16px;bottom:16px;z-index:9999;box-shadow:0 4px 14px #0003;display:none;border:2px solid white}
+#botaoVoltarInicio.visivel{display:block}
+@media(max-width:520px){#botaoVoltarInicio{right:10px;bottom:10px;padding:12px;font-size:13px}}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){main{padding:12px 8px}.grid{gap:8px}.metric{padding:11px}.metric .value{font-size:18px}.card{padding:13px}.form-grid{grid-template-columns:1fr}h1{font-size:22px}}
 </style>
@@ -176,6 +179,7 @@ footer{text-align:center;color:var(--cinza);font-size:12px;padding:20px}
   </div>
 </section>
 </main>
+<button id="botaoVoltarInicio" class="btn" type="button" onclick="irAba('inicio')">← Voltar ao início</button>
 <footer>Edeval-Cheques · Protótipo em desenvolvimento</footer>
 
 <script>
@@ -222,7 +226,9 @@ function nomeCliente(id){return cliente(id)?.nome||'Cliente excluído'}
 function liquido(c){return Math.max(0,(Number(c.valor)||0)-(Number(c.juros)||0))}
 function statusTag(s){return `<span class="tag ${s==='Pago'?'pago':s==='Não pago'?'naopago':''}">${esc(s||'Pendente')}</span>`}
 function irAba(id){
+ if(!document.getElementById(id))return;
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+ const voltar=document.getElementById('botaoVoltarInicio');if(voltar)voltar.classList.toggle('visivel',id!=='inicio');
  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
  if(id==='inicio')renderInicio();
  if(id==='clientes')renderClientes();
