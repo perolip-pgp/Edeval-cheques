@@ -6,17 +6,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Edeval-Cheques</title>
 <style>
-:root{--azul:#155eef;--escuro:#102a56;--fundo:#f3f6fa;--borda:#e1e7ef;--texto:#182334;--cinza:#667085;--verde:#067647;--vermelho:#b42318;--laranja:#b54708}
+:root{--azul:#006437;--escuro:#004225;--fundo:#f2f7f3;--borda:#d7e5dc;--texto:#18291f;--cinza:#5e7065;--verde:#067647;--vermelho:#b42318;--laranja:#b54708}
 *{box-sizing:border-box}
 body{margin:0;background:var(--fundo);font-family:Arial,sans-serif;color:var(--texto)}
-header{background:var(--escuro);color:white;padding:20px}
+header{background:linear-gradient(135deg,#004225,#006437 65%,#087f4b);color:white;padding:20px;border-bottom:4px solid #d8b64c}
 .cabecalho,main{max-width:1200px;margin:auto}
 .cabecalho{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h1{font-size:25px;margin:0}header p{margin:6px 0 0;color:#d5e4ff;font-size:13px}
+h1{font-size:25px;margin:0}header p{margin:6px 0 0;color:#e0f0e5;font-size:13px}
+.marca-titulo{display:flex;align-items:center;gap:12px}
+.logo-palmeiras{width:54px;height:62px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 3px rgba(0,0,0,.18))}
+@media(max-width:520px){.logo-palmeiras{width:43px;height:50px}.marca-titulo{gap:9px}}
 main{padding:18px 12px 35px}
 nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px}
 nav button{white-space:nowrap;border:1px solid var(--borda);background:white;border-radius:9px;padding:12px;font-weight:bold;color:#344054;cursor:pointer}
-nav button.active,.btn{background:var(--azul);color:white}
+nav button.active,.btn{background:var(--azul);color:white}nav button.active{border-color:var(--azul);box-shadow:0 2px 7px #00422525}
 .panel{display:none}.panel.active{display:block}
 .card,.metric{background:white;border:1px solid var(--borda);border-radius:13px;padding:17px;margin-bottom:15px}
 h2{font-size:20px;margin:0 0 14px}h3{font-size:16px;margin:0 0 12px}
@@ -37,16 +40,16 @@ input[type=file]{font-size:12px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:760px}
 th,td{padding:10px 8px;border-bottom:1px solid var(--borda);text-align:left;font-size:13px;vertical-align:middle}
-th{background:#f8fafc;color:#475467;font-size:12px}
+th{background:#edf5ef;color:#294b37;font-size:12px}
 td select{min-width:120px;padding:8px}
 .section-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .empty{text-align:center;color:var(--cinza);padding:24px}
 .tag{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold;background:#fff0d6;color:var(--laranja)}
 .tag.pago{background:#d1fadf;color:var(--verde)}
 .tag.naopago{background:#fee4e2;color:var(--vermelho)}
-.cheque-box{border:1px solid var(--borda);border-radius:10px;padding:13px;margin:12px 0;background:#fafcff}
+.cheque-box{border:1px solid var(--borda);border-radius:10px;padding:13px;margin:12px 0;background:#f7fbf8}
 .cheque-box h3{display:flex;justify-content:space-between;gap:10px}
-.summary{background:#edf4ff;border-radius:10px;padding:14px;margin:15px 0}
+.summary{background:#e7f4eb;border:1px solid #c5dfce;border-radius:10px;padding:14px;margin:15px 0}
 .summary-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}
 .summary-row.total{border-top:1px solid #c5d8fa;margin-top:6px;padding-top:12px;font-size:17px;font-weight:bold}
 .photo-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
@@ -60,7 +63,7 @@ footer{text-align:center;color:var(--cinza);font-size:12px;padding:20px}
 <body>
 <header>
   <div class="cabecalho">
-    <div><h1>💳 Edeval-Cheques</h1><p>Controle de trocas, clientes, juros e recebimentos</p></div>
+    <div class="marca-titulo"><img class="logo-palmeiras" src="https://upload.wikimedia.org/wikipedia/commons/6/68/Sociedade_Esportiva_Palmeiras_logo_%281_red_star%29.svg" alt="Escudo do Palmeiras"><div><h1>💳 Edeval-Cheques</h1><p>Controle de trocas, clientes, juros e recebimentos</p></div></div>
     <div id="dataHoje"></div>
   </div>
 </header>
@@ -132,7 +135,7 @@ footer{text-align:center;color:var(--cinza);font-size:12px;padding:20px}
         <div class="summary-row"><span>Juros descontados</span><strong id="resumoJuros">R$ 0,00</strong></div>
         <div class="summary-row total"><span>Valor a entregar ao cliente</span><strong id="resumoLiquido">R$ 0,00</strong></div>
       </div>
-      <p class="muted">Cálculo estimado de juros simples: valor × taxa mensal × dias ÷ 30.</p>
+      <p class="muted">Cálculo de juros simples proporcional aos dias: valor do cheque × (taxa mensal ÷ 100) × (dias ÷ 30). O sistema arredonda os juros para centavos.</p>
       <div class="actions"><button type="submit" class="btn">Registrar troca</button><button type="button" class="btn secondary" id="limparOperacao">Limpar formulário</button></div>
     </form>
   </div>
@@ -181,7 +184,16 @@ function dinheiro(n){return (Number(n)||0).toLocaleString('pt-BR',{style:'curren
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function dataBR(s){if(!s)return '—';const p=s.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:s}
 function diasEntre(a,b){if(!a||!b)return 0;return Math.max(0,Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/86400000))}
-function jurosCalculo(valor,taxa,dias){return Math.round(Math.max(0,Number(valor)||0)*Math.max(0,Number(taxa)||0)/100*Math.max(0,dias)/30*100)/100}
+function jurosCalculo(valor,taxa,dias){
+ // Juros simples: principal × taxa mensal × (dias / 30), arredondado a centavos.
+ const principal=Number(valor);
+ const taxaMensal=Number(taxa);
+ const diasCorridos=Number(dias);
+ if(!Number.isFinite(principal)||!Number.isFinite(taxaMensal)||!Number.isFinite(diasCorridos))return 0;
+ if(principal<=0||taxaMensal<=0||diasCorridos<=0)return 0;
+ const juros=principal*(taxaMensal/100)*(diasCorridos/30);
+ return Math.round((juros+1e-9)*100)/100;
+}
 function lerDados(){
  try{
   const d=JSON.parse(localStorage.getItem(KEY)||'{}');
@@ -330,7 +342,8 @@ function recalcular(){
  document.querySelectorAll('.cheque-box').forEach(el=>{
   const valor=Number(el.querySelector('.valor').value)||0,venc=el.querySelector('.venc').value;
   const dias=diasEntre(data,venc),j=jurosCalculo(valor,taxa,dias);total+=valor;juros+=j;
-  el.querySelector('.calculo').textContent=valor>0&&venc?`${dias} dias · Juros: ${dinheiro(j)} · Valor entregue: ${dinheiro(valor-j)}`:'Informe o valor e vencimento.';
+  const dataValida=!!data&&!!venc&&venc>data;
+  el.querySelector('.calculo').textContent=valor>0&&venc&&data?(dataValida?`${dias} dias · Juros: ${dinheiro(j)} · Valor entregue: ${dinheiro(valor-j)}`:'Atenção: vencimento deve ser posterior à data da troca.'):'Informe valor, data da troca e vencimento.';
  });
  document.getElementById('resumoNominal').textContent=dinheiro(total);
  document.getElementById('resumoJuros').textContent=dinheiro(juros);
@@ -355,6 +368,7 @@ document.getElementById('formOperacao').addEventListener('submit',e=>{
  for(const el of caixas){
   const v=Number(el.querySelector('.valor').value),d=el.querySelector('.venc').value;
   if(v<=0||!d){alert('Preencha o valor e vencimento de todos os cheques.');return}
+  if(!data||d<=data){alert('O vencimento de cada cheque deve ser posterior à data da troca. Confira as datas.');return}
   if(jurosCalculo(v,taxa,diasEntre(data,d))>=v){alert('Os juros não podem ser iguais ou maiores que o valor do cheque.');return}
  }
  const op=idNovo(),novos=caixas.map(el=>{
