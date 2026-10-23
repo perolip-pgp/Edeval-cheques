@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChequeFlow</title>
+<style>
+:root{font-family:Arial,sans-serif;color:#172033;background:#f3f6fb}
+*{box-sizing:border-box}body{margin:0}
+header{background:#102b4e;color:white;padding:22px}
+header h1{margin:0;font-size:25px}header p{margin:7px 0 0;color:#c9d9ed}
+nav{display:flex;gap:8px;overflow:auto;padding:12px;background:white;border-bottom:1px solid #ddd}
+button{cursor:pointer;border:0;border-radius:8px;padding:11px 14px;font-weight:600}
+nav button{background:#edf2f8;color:#234}nav button.active,.primary{background:#1769d2;color:white}
+main{max-width:1050px;margin:auto;padding:20px}
+h2{margin-top:0}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:22px}
+.card,.panel{background:white;border:1px solid #e1e7ef;border-radius:12px;padding:17px}
+.card small{color:#64748b}.number{font-size:24px;font-weight:bold;margin-top:10px}
+.panel{margin-bottom:16px}form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+label{font-size:13px;color:#475569;display:grid;gap:6px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;font:inherit;background:white}
+.actions{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;min-width:550px}th,td{text-align:left;padding:11px;border-bottom:1px solid #e5eaf1;font-size:14px}
+th{background:#f7f9fc}.tablewrap{overflow:auto}.muted{color:#64748b;font-size:13px}
+.danger{background:#fee2e2;color:#991b1b}.empty{padding:20px;color:#64748b;text-align:center}
+@media(max-width:600px){main{padding:12px}header{padding:18px}nav button{white-space:nowrap}}
+</style>
+</head>
+<body>
+<header>
+<h1>ChequeFlow</h1>
+<p>Controle de clientes, cheques e trocas</p>
+</header>
+<nav id="nav"></nav>
+<main id="app"></main>
+<script>
+const tabs=[
+["inicio","Início"],["clientes","Clientes"],["cheques","Cheques"],
+["trocas","Trocas"],["vencimentos","Vencimentos"],["relatorios","Relatórios"]
+];
+let page="inicio";
+let db={clientes:[],cheques:[],trocas:[]};
+try{db=JSON.parse(localStorage.getItem("chequeflow-demo"))||db}catch(e){}
+const money=n=>Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const save=()=>localStorage.setItem("chequeflow-demo",JSON.stringify(db));
+const today=()=>new Date().toISOString().slice(0,10);
+function nav(){
+document.getElementById("nav").innerHTML=tabs.map(([id,t])=>`<button class="${page===id?"active":""}" onclick="go('${id}')">${t}</button>`).join("");
+}
+function go(p){page=p;render()}
+function options(){return '<option value="">Selecione um cliente</option>'+db.clientes.map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join("")}
+function table(headers,rows){return `<div class="tablewrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows||`<tr><td colspan="${headers.length}" class="empty">Nenhum registro cadastrado.</td></tr>`}</tbody></table></div>`}
+function remove(type,id){if(confirm("Deseja excluir este registro?")){db[type]=db[type].filter(x=>x.id!==id);save();render()}}
+function render(){
+nav();let a=document.getElementById("app");
+if(page==="inicio"){
+a.innerHTML=`<h2>Visão geral</h2><div class="cards">
+<div class="card"><small>Clientes</small><div class="number">${db.clientes.length}</div></div>
+<div class="card"><small>Cheques cadastrados</small><div class="number">${db.cheques.length}</div></div>
+<div class="card"><small>Valor dos cheques</small><div class="number">${money(db.cheques.reduce((s,c)=>s+Number(c.valor),0))}</div></div>
+<div class="card"><small>Trocas registradas</small><div class="number">${db.trocas.length}</div></div></div>
+<div class="panel"><h3>Comece por aqui</h3><p>Cadastre um cliente, registre os cheques dele e depois registre uma troca.</p><p class="muted">Esta versão de demonstração salva dados apenas neste navegador.</p></div>`;
+}
+if(page==="clientes"){
+a.innerHTML=`<h2>Clientes</h2><div class="panel"><h3>Novo cliente</h3><form id="fc">
+<label>Nome completo<input name="nome" required></label><label>Telefone / WhatsApp<input name="telefone" placeholder="(00) 00000-0000"></label>
+<div class="actions"><button class="primary">Salvar cliente</button></div></form></div>
+<div class="panel"><h3>Clientes cadastrados</h3>${table(["Cliente","Telefone","Cheques","Ações"],db.clientes.map(c=>`<tr><td>${esc(c.nome)}</td><td>${esc(c.telefone||"-")}</td><td>${db.cheques.filter(x=>x.cliente===c.id).length}</td><td><button class="danger" onclick="remove('clientes','${c.id}')">Excluir</button></td></tr>`).join(""))}</div>`;
+document.getElementById("fc").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);db.clientes.push({id:crypto.randomUUID(),nome:f.get("nome").trim(),telefone:f.get("telefone").trim()});save();render()};
+}
+if(page==="cheques"){
+a.innerHTML=`<h2>Cheques</h2><div class="panel"><h3>Cadastrar cheque</h3><form id="fh">
+<label>Cliente<select name="cliente" required>${options()}</select></label><label>Número do cheque<input name="numero" placeholder="Número ou identificação"></label>
+<label>Valor (R$)<input name="valor" type="number" min="0.01" step="0.01" required></label><label>Vencimento<input name="vencimento" type="date" required></label>
+<label>Banco<input name="banco" placeholder="Nome do banco"></label><label>Status<select name="status"><option>A receber</option><option>Compensado</option><option>Devolvido</option></select></label>
+<div class="actions"><button class="primary">Salvar cheque</button></div></form><p class="muted">As fotos da frente e do verso serão adicionadas na etapa de armazenamento seguro.</p></div>
+<div class="panel"><h3>Cheques cadastrados</h3>${table(["Cliente","Número","Valor","Vencimento","Status","Ações"],db.cheques.map(c=>`<tr><td>${esc(db.clientes.find(x=>x.id===c.cliente)?.nome||"Cliente removido")}</td><td>${esc(c.numero||"-")}</td><td>${money(c.valor)}</td><td>${esc(c.vencimento)}</td><td>${esc(c.status)}</td><td><button class="danger" onclick="remove('cheques','${c.id}')">Excluir</button></td></tr>`).join(""))}</div>`;
+document.getElementById("fh").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target);db.cheques.push({id:crypto.randomUUID(),cliente:f.get("cliente"),numero:f.get("numero"),valor:Number(f.get("valor")),vencimento:f.get("vencimento"),banco:f.get("banco"),status:f.get("status")});save();render()};
+}
+if(page==="trocas"){
+a.innerHTML=`<h2>Trocas</h2><div class="panel"><h3>Registrar troca</h3><form id="ft">
+<label>Cliente<select name="cliente" required>${options()}</select></label><label>Valor dos cheques (R$)<input name="valor" type="number" min="0.01" step="0.01" required></label>
+<label>Taxa de juros ao mês (%)<input name="taxa" type="number" min="0" step="0.01" value="5" required></label>
+<label>Prazo em dias<input name="dias" type="number" min="0" value="30" required></label>
+<label>Data da troca<input name="data" type="date" value="${today()}" required></label>
+<label>Observações<input name="obs"></label><div class="actions"><button class="primary">Registrar troca</button></div></form>
+<p class="muted">Estimativa de juros simples proporcional aos dias: valor × taxa mensal × dias ÷ 30. A taxa de 5% é apenas um exemplo editável.</p></div>
+<div class="panel"><h3>Histórico de trocas</h3>${table(["Data","Cliente","Valor","Juros","Líquido estimado","Ações"],db.trocas.map(t=>`<tr><td>${esc(t.data)}</td><td>${esc(db.clientes.find(c=>c.id===t.cliente)?.nome||"Cliente removido")}</td><td>${money(t.valor)}</td><td>${money(t.juros)}</td><td>${money(t.valor-t.juros)}</td><td><button class="danger" onclick="remove('trocas','${t.id}')">Excluir</button></td></tr>`).join(""))}</div>`;
+document.getElementById("ft").onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),valor=Number(f.get("valor")),taxa=Number(f.get("taxa")),dias=Number(f.get("dias"));db.trocas.push({id:crypto.randomUUID(),cliente:f.get("cliente"),valor,taxa,dias,data:f.get("data"),obs:f.get("obs"),juros:valor*taxa/100*dias/30});save();render()};
+}
+if(page==="vencimentos"){
+let cs=[...db.cheques].sort((x,y)=>x.vencimento.localeCompare(y.vencimento));
+a.innerHTML=`<h2>Vencimentos</h2><div class="panel"><p class="muted">Cheques ordenados pela data de vencimento.</p>${table(["Vencimento","Cliente","Valor","Status"],cs.map(c=>`<tr><td>${esc(c.vencimento)}${c.vencimento<today()&&c.status==="A receber"?' ⚠️ Vencido':""}</td><td>${esc(db.clientes.find(x=>x.id===c.cliente)?.nome||"-")}</td><td>${money(c.valor)}</td><td>${esc(c.status)}</td></tr>`).join(""))}</div>`;
+}
+if(page==="relatorios"){
+let total=db.cheques.reduce((s,c)=>s+Number(c.valor),0),juros=db.trocas.reduce((s,t)=>s+Number(t.juros),0);
+a.innerHTML=`<h2>Relatórios</h2><div class="cards"><div class="card"><small>Total em cheques cadastrados</small><div class="number">${money(total)}</div></div><div class="card"><small>Juros estimados nas trocas</small><div class="number">${money(juros)}</div></div><div class="card"><small>Clientes</small><div class="number">${db.clientes.length}</div></div></div><div class="panel"><p>Valores calculados a partir dos registros desta demonstração.</p><button class="primary" onclick="exportar()">Exportar dados CSV</button></div>`;
+}
+}
+function exportar(){
+let linhas=[["tipo","cliente","valor","data","detalhes"]];
+db.clientes.forEach(c=>linhas.push(["cliente",c.nome,"", "",c.telefone||""]));
+db.cheques.forEach(c=>linhas.push(["cheque",db.clientes.find(x=>x.id===c.cliente)?.nome||"",c.valor,c.vencimento,`${c.numero||""} ${c.status}`]));
+db.trocas.forEach(t=>linhas.push(["troca",db.clientes.find(x=>x.id===t.cliente)?.nome||"",t.valor,t.data,`juros ${t.juros.toFixed(2)}`]));
+let csv=linhas.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n"),url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"})),link=document.createElement("a");link.href=url;link.download="chequeflow-relatorio.csv";link.click();URL.revokeObjectURL(url);
+}
+render();
+</script>
+</body>
+</html>
