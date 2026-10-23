@@ -150,7 +150,7 @@ footer{text-align:center;color:var(--cinza);font-size:12px;padding:20px}
 
 <section id="relatorios" class="panel">
   <div class="card">
-    <div class="section-heading"><div><h2>Relatórios</h2><p class="muted">Altere a situação na lista de seleção.</p></div><button class="btn secondary" id="exportarCSV">Exportar CSV</button></div>
+    <div class="section-heading"><div><h2>Relatórios</h2><p class="muted">Altere a situação na lista de seleção.</p></div><div class="actions"><button class="btn secondary" onclick="irAba('inicio')">← Voltar ao início</button><button class="btn secondary" id="exportarCSV">Exportar CSV</button><button class="btn" onclick="exportarFotosZIP()">Exportar todas as fotos (ZIP)</button></div></div>
     <div class="form-grid">
       <div class="field"><label for="filtroRelatorio">Cliente</label><select id="filtroRelatorio"><option value="">Todos os clientes</option></select></div>
       <div class="field"><label for="filtroStatus">Situação</label><select id="filtroStatus"><option value="">Todas</option><option>Pendente</option><option>Pago</option><option>Não pago</option></select></div>
@@ -404,7 +404,7 @@ function statusSelect(c){
 function renderRelatorios(){
  const cli=document.getElementById('filtroRelatorio').value,st=document.getElementById('filtroStatus').value;
  const lista=[...db.cheques].filter(c=>(!cli||c.clienteId===cli)&&(!st||c.status===st)).sort((a,b)=>(b.dataOperacao||'').localeCompare(a.dataOperacao||''));
- document.getElementById('tabelaRelatorios').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Troca</th><th>Cheque</th><th>Juros iniciais</th><th>Valor entregue</th><th>Vencimento</th><th>Situação</th><th>Detalhes</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dataBR(c.dataOperacao)}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(c.juros)}</td><td><b>${dinheiro(liquido(c))}</b></td><td>${dataBR(c.vencimento)}</td><td>${statusSelect(c)}</td><td><button class="btn small secondary" onclick="verCheque('${c.id}')">Ver</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum cheque encontrado.</div>';
+ document.getElementById('tabelaRelatorios').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Troca</th><th>Cheque</th><th>Juros iniciais</th><th>Valor entregue</th><th>Vencimento</th><th>Situação</th><th>Detalhes</th><th>Ações</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dataBR(c.dataOperacao)}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(c.juros)}</td><td><b>${dinheiro(liquido(c))}</b></td><td>${dataBR(c.vencimento)}</td><td>${statusSelect(c)}</td><td><button class="btn small secondary" onclick="verCheque('${c.id}')">Ver</button></td><td><button class="btn small danger" onclick="excluirCheque('${c.id}')">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum cheque encontrado.</div>';
 }
 document.getElementById('filtroRelatorio').onchange=renderRelatorios;
 document.getElementById('filtroStatus').onchange=renderRelatorios;
@@ -428,13 +428,51 @@ function renovarCheque(id,dias){
 }
 function renderVencimentos(){
  const h=hoje(),lista=db.cheques.filter(c=>c.status!=='Pago').sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
- document.getElementById('tabelaVencimentos').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor original</th><th>Vencimento atual</th><th>Situação</th><th>Renovar</th><th>Ações</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dataBR(c.vencimento)} ${c.vencimento<h?'<span class="tag naopago">Vencido</span>':''}</td><td>${statusTag(c.status)}</td><td><div class="actions"><button class="btn small" onclick="renovarCheque('${c.id}',30)">30 dias</button><button class="btn small" onclick="renovarCheque('${c.id}',60)">60 dias</button><button class="btn small" onclick="renovarCheque('${c.id}',90)">90 dias</button></div></td><td>${statusSelect(c)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Não há cheques aguardando recebimento.</div>';
+ document.getElementById('tabelaVencimentos').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor original</th><th>Vencimento atual</th><th>Situação</th><th>Renovar</th><th>Ações</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dataBR(c.vencimento)} ${c.vencimento<h?'<span class="tag naopago">Vencido</span>':''}</td><td>${statusTag(c.status)}</td><td><div class="actions"><button class="btn small" onclick="renovarCheque('${c.id}',30)">30 dias</button><button class="btn small" onclick="renovarCheque('${c.id}',60)">60 dias</button><button class="btn small" onclick="renovarCheque('${c.id}',90)">90 dias</button></div></td><td><div class="actions">${statusSelect(c)}<button class="btn small danger" onclick="excluirCheque('${c.id}')">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Não há cheques aguardando recebimento.</div>';
  const renovacoes=[...db.renovacoes].sort((a,b)=>(b.data||'').localeCompare(a.data||''));
  document.getElementById('historicoRenovacoes').innerHTML=renovacoes.length?`<div class="table-wrap"><table><thead><tr><th>Data</th><th>Cliente</th><th>Valor original</th><th>Prazo</th><th>Juros recebidos</th><th>Vencimento anterior</th><th>Novo vencimento</th></tr></thead><tbody>${renovacoes.map(r=>`<tr><td>${dataBR(r.data)}</td><td>${esc(nomeCliente(r.clienteId))}</td><td>${dinheiro(r.valorOriginal)}</td><td>${r.dias} dias</td><td>${dinheiro(r.juros)}</td><td>${dataBR(r.vencimentoAnterior)}</td><td>${dataBR(r.novoVencimento)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhuma renovação registrada.</div>';
 }
 function renderDevolvidos(){
  const lista=db.cheques.filter(c=>c.status==='Não pago').sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
- document.getElementById('tabelaDevolvidos').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor original</th><th>Juros iniciais</th><th>Vencimento</th><th>Situação</th><th>Opções</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(c.juros)}</td><td>${dataBR(c.vencimento)}</td><td>${statusSelect(c)}</td><td><button class="btn small" onclick="irAba('vencimentos')">Ver renovação</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Não há cheques marcados como não pagos.</div>';
+ document.getElementById('tabelaDevolvidos').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor original</th><th>Juros iniciais</th><th>Vencimento</th><th>Situação</th><th>Opções</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(c.juros)}</td><td>${dataBR(c.vencimento)}</td><td>${statusSelect(c)}</td><td><div class="actions"><button class="btn small" onclick="irAba('vencimentos')">Ver renovação</button><button class="btn small danger" onclick="excluirCheque('${c.id}')">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Não há cheques marcados como não pagos.</div>';
+}
+function excluirCheque(id){
+ const c=db.cheques.find(x=>x.id===id);if(!c)return;
+ const fotos=(c.frente||c.verso)?' As fotos deste cheque também serão removidas do aplicativo.':'';
+ if(!confirm(`Tem certeza que deseja excluir o cheque de ${nomeCliente(c.clienteId)} no valor de ${dinheiro(c.valor)}?\n\nEssa ação também apagará o histórico de renovações deste cheque e não poderá ser desfeita.${fotos}\n\nRecomendo exportar um backup antes.`))return;
+ const idsRenovacoes=new Set(db.renovacoes.filter(r=>r.chequeId===id).map(r=>r.id));
+ db.cheques=db.cheques.filter(x=>x.id!==id);
+ db.renovacoes=db.renovacoes.filter(r=>r.chequeId!==id&&!idsRenovacoes.has(r.id));
+ db.operacoes=db.operacoes.map(o=>({...o,cheques:(o.cheques||[]).filter(cid=>cid!==id)})).filter(o=>(o.cheques||[]).length);
+ db.cheques.forEach(x=>{x.historicoRenovacoes=(x.historicoRenovacoes||[]).filter(rid=>!idsRenovacoes.has(rid));});
+ if(!salvar()){alert('Não foi possível salvar a exclusão. Atualize a página e confira os dados.');return}
+ renderTudo();alert('Cheque excluído.');
+}
+function nomeArquivoSeguro(s){return String(s||'cliente').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,50)||'cliente'}
+function dataArquivo(s){return /^\d{4}-\d{2}-\d{2}$/.test(s||'')?s:'data_sem_registro'}
+function base64ParaBytes(dataUrl){const b64=(dataUrl.split(',')[1]||'');const bin=atob(b64);const out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out}
+function crc32(bytes){let crc=0xffffffff;for(let i=0;i<bytes.length;i++){crc^=bytes[i];for(let j=0;j<8;j++)crc=(crc>>>1)^((crc&1)?0xedb88320:0)}return (crc^0xffffffff)>>>0}
+function montarZIP(files){
+ const enc=new TextEncoder(),partes=[],central=[];let offset=0;
+ const u16=(n)=>new Uint8Array([n&255,(n>>>8)&255]);
+ const u32=(n)=>new Uint8Array([n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]);
+ const join=(arr)=>{let len=arr.reduce((s,a)=>s+a.length,0),out=new Uint8Array(len),at=0;for(const a of arr){out.set(a,at);at+=a.length}return out};
+ for(const f of files){const name=enc.encode(f.name),bytes=f.bytes,crc=crc32(bytes);
+  const local=join([u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(0),u16(0),u32(crc),u32(bytes.length),u32(bytes.length),u16(name.length),u16(0),name,bytes]);partes.push(local);
+  const cent=join([u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(0),u16(0),u32(crc),u32(bytes.length),u32(bytes.length),u16(name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),name]);central.push(cent);offset+=local.length;
+ }
+ const csize=central.reduce((s,a)=>s+a.length,0),end=join([u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(csize),u32(offset),u16(0)]);
+ return new Blob([...partes,...central,end],{type:'application/zip'});
+}
+async function exportarFotosZIP(){
+ const files=[];const cheques=[...db.cheques].sort((a,b)=>(a.dataOperacao||'').localeCompare(b.dataOperacao||'')||(a.vencimento||'').localeCompare(b.vencimento||''));
+ for(const c of cheques){const data=dataArquivo(c.dataOperacao),cli=nomeArquivoSeguro(nomeCliente(c.clienteId)),valor=(Number(c.valor)||0).toFixed(2).replace('.','-');
+  if(c.frente)files.push({name:`${data}_${cli}_R$${valor}_frente.jpg`,bytes:base64ParaBytes(c.frente)});
+  if(c.verso)files.push({name:`${data}_${cli}_R$${valor}_verso.jpg`,bytes:base64ParaBytes(c.verso)});
+ }
+ if(!files.length){alert('Não encontrei fotos anexadas aos cheques.');return}
+ if(files.length>500){if(!confirm(`Foram encontradas ${files.length} fotos. O arquivo pode ficar pesado. Deseja continuar?`))return}
+ try{const blob=montarZIP(files),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`edeval-cheques-fotos-por-data-${hoje()}.zip`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);alert(`Exportação preparada: ${files.length} fotos, organizadas por data e com nome do cliente.\n\nNo computador, envie o arquivo ZIP pelo WhatsApp como documento. No iPhone, abra o arquivo baixado em Arquivos e use Compartilhar.`)}catch(e){console.error(e);alert('Não consegui criar o arquivo. Tente exportar em um computador ou com menos fotos.');}
 }
 function verCheque(id){
  const c=db.cheques.find(x=>x.id===id);if(!c)return;
