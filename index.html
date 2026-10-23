@@ -3,73 +3,65 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Edeval-Cheques</title>
 <style>
-:root{--bg:#f3f6fa;--card:#fff;--text:#182334;--muted:#667085;--primary:#155eef;--line:#e1e7ef;--green:#067647;--red:#b42318;--orange:#b54708}
+:root{--azul:#155eef;--escuro:#102a56;--fundo:#f3f6fa;--borda:#e1e7ef;--texto:#182334;--cinza:#667085;--verde:#067647;--vermelho:#b42318;--laranja:#b54708}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
-header{background:#102a56;color:white;padding:20px 18px}
-.header-inner{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-header h1{margin:0;font-size:25px}
-header p{margin:5px 0 0;color:#d5e4ff;font-size:13px}
-main{max-width:1200px;margin:20px auto;padding:0 14px 35px}
-nav{display:flex;gap:7px;overflow-x:auto;padding-bottom:12px}
-nav button{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:9px;padding:12px 15px;font-weight:700;cursor:pointer;color:#344054}
-nav button.active{background:var(--primary);color:white;border-color:var(--primary)}
-.panel{display:none}
-.panel.active{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:16px;box-shadow:0 2px 5px #10182808}
-h2{font-size:20px;margin:0 0 15px}
-h3{font-size:16px;margin:0 0 12px}
+body{margin:0;background:var(--fundo);font-family:Arial,sans-serif;color:var(--texto)}
+header{background:var(--escuro);color:white;padding:20px}
+.cabecalho,main{max-width:1200px;margin:auto}
+.cabecalho{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{font-size:25px;margin:0}header p{margin:6px 0 0;color:#d5e4ff;font-size:13px}
+main{padding:18px 12px 35px}
+nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:14px}
+nav button{white-space:nowrap;border:1px solid var(--borda);background:white;border-radius:9px;padding:12px;font-weight:bold;color:#344054;cursor:pointer}
+nav button.active,.btn{background:var(--azul);color:white}
+.panel{display:none}.panel.active{display:block}
+.card,.metric{background:white;border:1px solid var(--borda);border-radius:13px;padding:17px;margin-bottom:15px}
+h2{font-size:20px;margin:0 0 14px}h3{font-size:16px;margin:0 0 12px}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.metric{background:white;border:1px solid var(--line);border-radius:13px;padding:17px;min-width:0}
-.metric .label{font-size:13px;color:var(--muted);margin-bottom:9px}
+.metric .label{font-size:13px;color:var(--cinza);margin-bottom:9px}
 .metric .value{font-size:clamp(19px,2.4vw,27px);font-weight:800;overflow-wrap:anywhere}
-.metric .note{font-size:12px;color:var(--muted);margin-top:7px}
-label{display:block;font-size:13px;font-weight:700;margin:0 0 6px}
-input,select,textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:var(--text);font:inherit;min-width:0}
-input[type=file]{padding:8px;font-size:12px}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.field{margin-bottom:13px}
-button{font:inherit}
-.btn{border:0;border-radius:8px;padding:11px 15px;background:var(--primary);color:white;font-weight:700;cursor:pointer}
+.metric .note,.muted{font-size:12px;color:var(--cinza);margin-top:7px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+input,select{width:100%;min-width:0;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:white;font:inherit;color:var(--texto)}
+input[type=file]{font-size:12px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{margin-bottom:12px}
+.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}
 .btn.secondary{background:#eaf0f9;color:#23395d}
 .btn.danger{background:#fee4e2;color:#912018}
 .btn.small{padding:7px 9px;font-size:12px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.table-wrap{width:100%;overflow-x:auto}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:760px}
-th,td{text-align:left;border-bottom:1px solid var(--line);padding:11px 9px;font-size:13px;vertical-align:middle}
-th{color:#475467;background:#f8fafc;font-size:12px}
-td select{min-width:125px;padding:8px}
-.muted{color:var(--muted);font-size:13px}
-.empty{text-align:center;padding:25px;color:var(--muted)}
-.tag{display:inline-block;border-radius:20px;padding:5px 9px;font-size:11px;font-weight:700;background:#fff0d6;color:var(--orange)}
-.tag.pago{background:#d1fadf;color:var(--green)}
-.tag.naopago{background:#fee4e2;color:var(--red)}
-.cheque-box{border:1px solid var(--line);border-radius:10px;padding:14px;margin:13px 0;background:#fafcff}
-.cheque-box h3{display:flex;justify-content:space-between;align-items:center}
-.summary{background:#edf4ff;border-radius:10px;padding:15px;margin:15px 0}
-.summary-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}
-.summary-row.total{border-top:1px solid #c5d8fa;margin-top:6px;padding-top:12px;font-weight:800;font-size:17px}
-.photo-preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-.photo-preview img{width:100px;height:85px;object-fit:cover;border-radius:7px;border:1px solid var(--line)}
+th,td{padding:10px 8px;border-bottom:1px solid var(--borda);text-align:left;font-size:13px;vertical-align:middle}
+th{background:#f8fafc;color:#475467;font-size:12px}
+td select{min-width:120px;padding:8px}
 .section-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-hr{border:0;border-top:1px solid var(--line);margin:18px 0}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+.empty{text-align:center;color:var(--cinza);padding:24px}
+.tag{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold;background:#fff0d6;color:var(--laranja)}
+.tag.pago{background:#d1fadf;color:var(--verde)}
+.tag.naopago{background:#fee4e2;color:var(--vermelho)}
+.cheque-box{border:1px solid var(--borda);border-radius:10px;padding:13px;margin:12px 0;background:#fafcff}
+.cheque-box h3{display:flex;justify-content:space-between;gap:10px}
+.summary{background:#edf4ff;border-radius:10px;padding:14px;margin:15px 0}
+.summary-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}
+.summary-row.total{border-top:1px solid #c5d8fa;margin-top:6px;padding-top:12px;font-size:17px;font-weight:bold}
+.photo-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.photo-preview img{width:90px;height:75px;object-fit:cover;border-radius:7px}
+hr{border:0;border-top:1px solid var(--borda);margin:17px 0}
+footer{text-align:center;color:var(--cinza);font-size:12px;padding:20px}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){header h1{font-size:22px}.grid{grid-template-columns:1fr 1fr;gap:8px}.metric{padding:12px}.metric .value{font-size:19px}.card{padding:14px}.form-grid{grid-template-columns:1fr}main{padding:0 9px 25px}nav button{padding:10px 12px}}
+@media(max-width:520px){main{padding:12px 8px}.grid{gap:8px}.metric{padding:11px}.metric .value{font-size:18px}.card{padding:13px}.form-grid{grid-template-columns:1fr}h1{font-size:22px}}
 </style>
 </head>
 <body>
 <header>
-  <div class="header-inner">
-    <div>
-      <h1>💳 Edeval-Cheques</h1>
-      <p>Controle de clientes, trocas, recebimentos e lucro</p>
-    </div>
-    <div id="dataHoje" style="font-size:13px"></div>
+  <div class="cabecalho">
+    <div><h1>💳 Edeval-Cheques</h1><p>Controle de trocas, clientes, juros e recebimentos</p></div>
+    <div id="dataHoje"></div>
   </div>
 </header>
 
@@ -80,69 +72,27 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
   <button data-tab="cheques">Nova troca</button>
   <button data-tab="relatorios">Relatórios</button>
   <button data-tab="vencimentos">Vencimentos</button>
+  <button data-tab="devolvidos">Cheques devolvidos</button>
 </nav>
 
 <section id="inicio" class="panel active">
   <div class="card">
     <div class="section-heading">
-      <div>
-        <h2>Resumo financeiro</h2>
-        <p class="muted">Consulte o capital utilizado e o resultado das trocas por mês.</p>
-      </div>
-      <div style="min-width:180px">
-        <label for="mesDashboard">Mês de consulta</label>
-        <input type="month" id="mesDashboard">
-      </div>
+      <div><h2>Resumo financeiro</h2><p class="muted">Selecione o mês que deseja consultar.</p></div>
+      <div style="min-width:180px"><label for="mesDashboard">Mês</label><input type="month" id="mesDashboard"></div>
     </div>
   </div>
-
   <div class="grid">
-    <div class="metric">
-      <div class="label">Capital utilizado no mês</div>
-      <div class="value" id="capitalMes">R$ 0,00</div>
-      <div class="note">Dinheiro entregue aos clientes</div>
-    </div>
-    <div class="metric">
-      <div class="label">Lucro previsto em juros</div>
-      <div class="value" id="lucroMes">R$ 0,00</div>
-      <div class="note">Juros descontados nas trocas do mês</div>
-    </div>
-    <div class="metric">
-      <div class="label">Cheques trocados no mês</div>
-      <div class="value" id="quantidadeMes">0</div>
-      <div class="note">Quantidade de cheques registrados</div>
-    </div>
-    <div class="metric">
-      <div class="label">Valor nominal dos cheques</div>
-      <div class="value" id="nominalMes">R$ 0,00</div>
-      <div class="note">Soma dos valores dos cheques</div>
-    </div>
-    <div class="metric">
-      <div class="label">Cheques pendentes</div>
-      <div class="value" id="pendentesTotal">0</div>
-      <div class="note">Aguardando recebimento</div>
-    </div>
-    <div class="metric">
-      <div class="label">Cheques não pagos</div>
-      <div class="value" id="naoPagosTotal">0</div>
-      <div class="note">Marcados como não pagos</div>
-    </div>
-    <div class="metric">
-      <div class="label">Clientes cadastrados</div>
-      <div class="value" id="clientesTotal">0</div>
-      <div class="note">Clientes registrados no sistema</div>
-    </div>
-    <div class="metric">
-      <div class="label">Cheques pagos</div>
-      <div class="value" id="pagosTotal">0</div>
-      <div class="note">Cheques marcados como pagos</div>
-    </div>
+    <div class="metric"><div class="label">Capital utilizado no mês</div><div class="value" id="capitalMes">R$ 0,00</div><div class="note">Dinheiro entregue aos clientes</div></div>
+    <div class="metric"><div class="label">Lucro em juros no mês</div><div class="value" id="lucroMes">R$ 0,00</div><div class="note">Juros iniciais e de renovações registrados no mês</div></div>
+    <div class="metric"><div class="label">Cheques trocados no mês</div><div class="value" id="quantidadeMes">0</div><div class="note">Sem contar renovações como novas trocas</div></div>
+    <div class="metric"><div class="label">Valor nominal trocado</div><div class="value" id="nominalMes">R$ 0,00</div><div class="note">Soma dos valores dos cheques originais</div></div>
+    <div class="metric"><div class="label">Cheques pendentes</div><div class="value" id="pendentesTotal">0</div><div class="note">Aguardando recebimento</div></div>
+    <div class="metric"><div class="label">Cheques devolvidos / não pagos</div><div class="value" id="naoPagosTotal">0</div><div class="note">Precisam de acompanhamento</div></div>
+    <div class="metric"><div class="label">Clientes cadastrados</div><div class="value" id="clientesTotal">0</div></div>
+    <div class="metric"><div class="label">Cheques pagos</div><div class="value" id="pagosTotal">0</div></div>
   </div>
-
-  <div class="card" style="margin-top:16px">
-    <h2>Últimos cheques registrados</h2>
-    <div id="ultimosCheques"></div>
-  </div>
+  <div class="card" style="margin-top:16px"><h2>Últimos cheques</h2><div id="ultimosCheques"></div></div>
 </section>
 
 <section id="clientes" class="panel">
@@ -151,30 +101,15 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
     <form id="formCliente">
       <input type="hidden" id="clienteEditando">
       <div class="form-grid">
-        <div class="field">
-          <label for="nomeCliente">Nome completo *</label>
-          <input id="nomeCliente" required maxlength="120" placeholder="Nome do cliente">
-        </div>
-        <div class="field">
-          <label for="telefoneCliente">Telefone / WhatsApp</label>
-          <input id="telefoneCliente" maxlength="30" placeholder="(00) 00000-0000">
-        </div>
-        <div class="field">
-          <label for="taxaCliente">Taxa mensal padrão (%)</label>
-          <input id="taxaCliente" type="number" min="0" max="100" step="0.01" value="2" required>
-        </div>
+        <div class="field"><label for="nomeCliente">Nome completo *</label><input id="nomeCliente" required maxlength="120"></div>
+        <div class="field"><label for="telefoneCliente">Telefone / WhatsApp</label><input id="telefoneCliente" maxlength="30"></div>
+        <div class="field"><label for="taxaCliente">Taxa mensal padrão (%)</label><input id="taxaCliente" type="number" min="0" max="100" step="0.01" value="2" required></div>
       </div>
-      <div class="actions">
-        <button class="btn" type="submit">Salvar cliente</button>
-        <button class="btn secondary" type="button" id="cancelarEdicao" hidden>Cancelar edição</button>
-      </div>
+      <div class="actions"><button class="btn">Salvar cliente</button><button class="btn secondary" type="button" id="cancelarEdicao" hidden>Cancelar edição</button></div>
     </form>
   </div>
   <div class="card">
-    <div class="section-heading">
-      <h2>Clientes cadastrados</h2>
-      <input id="buscarCliente" placeholder="Buscar cliente..." style="max-width:280px">
-    </div>
+    <div class="section-heading"><h2>Clientes cadastrados</h2><input id="buscarCliente" placeholder="Buscar cliente..." style="max-width:280px"></div>
     <div id="listaClientes"></div>
   </div>
 </section>
@@ -182,67 +117,33 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 <section id="cheques" class="panel">
   <div class="card">
     <h2>Registrar nova troca</h2>
-    <p class="muted">Selecione um cliente e adicione um ou mais cheques na mesma operação.</p>
+    <p class="muted">Adicione um ou mais cheques para o mesmo cliente.</p>
     <form id="formOperacao">
       <div class="form-grid">
-        <div class="field">
-          <label for="clienteOperacao">Cliente *</label>
-          <select id="clienteOperacao" required>
-            <option value="">Selecione um cliente</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="dataOperacao">Data da troca *</label>
-          <input type="date" id="dataOperacao" required>
-        </div>
-        <div class="field">
-          <label for="taxaOperacao">Taxa mensal (%) *</label>
-          <input type="number" id="taxaOperacao" min="0" max="100" step="0.01" value="2" required>
-        </div>
+        <div class="field"><label for="clienteOperacao">Cliente *</label><select id="clienteOperacao" required><option value="">Selecione um cliente</option></select></div>
+        <div class="field"><label for="dataOperacao">Data da troca *</label><input type="date" id="dataOperacao" required></div>
+        <div class="field"><label for="taxaOperacao">Taxa mensal (%) *</label><input type="number" id="taxaOperacao" min="0" max="100" step="0.01" value="2" required></div>
       </div>
       <hr>
-      <div class="section-heading">
-        <h3>Cheques desta operação</h3>
-        <button type="button" class="btn secondary" id="adicionarCheque">+ Adicionar cheque</button>
-      </div>
+      <div class="section-heading"><h3>Cheques desta operação</h3><button type="button" class="btn secondary" id="adicionarCheque">+ Adicionar cheque</button></div>
       <div id="listaChequesNovos"></div>
       <div class="summary">
         <div class="summary-row"><span>Valor total dos cheques</span><strong id="resumoNominal">R$ 0,00</strong></div>
-        <div class="summary-row"><span>Total de juros descontados</span><strong id="resumoJuros">R$ 0,00</strong></div>
-        <div class="summary-row total"><span>Valor líquido a entregar</span><strong id="resumoLiquido">R$ 0,00</strong></div>
+        <div class="summary-row"><span>Juros descontados</span><strong id="resumoJuros">R$ 0,00</strong></div>
+        <div class="summary-row total"><span>Valor a entregar ao cliente</span><strong id="resumoLiquido">R$ 0,00</strong></div>
       </div>
-      <p class="muted">Estimativa proporcional: valor do cheque × taxa mensal × dias até o vencimento ÷ 30. Confira os valores antes de registrar a operação.</p>
-      <div class="actions">
-        <button type="submit" class="btn">Registrar troca</button>
-        <button type="button" class="btn secondary" id="limparOperacao">Limpar formulário</button>
-      </div>
+      <p class="muted">Cálculo estimado de juros simples: valor × taxa mensal × dias ÷ 30.</p>
+      <div class="actions"><button type="submit" class="btn">Registrar troca</button><button type="button" class="btn secondary" id="limparOperacao">Limpar formulário</button></div>
     </form>
   </div>
 </section>
 
 <section id="relatorios" class="panel">
   <div class="card">
-    <div class="section-heading">
-      <div>
-        <h2>Relatórios de cheques</h2>
-        <p class="muted">Consulte as movimentações e atualize a situação de cada cheque.</p>
-      </div>
-      <button class="btn secondary" id="exportarCSV">Exportar CSV</button>
-    </div>
+    <div class="section-heading"><div><h2>Relatórios</h2><p class="muted">Altere a situação na lista de seleção.</p></div><button class="btn secondary" id="exportarCSV">Exportar CSV</button></div>
     <div class="form-grid">
-      <div class="field">
-        <label for="filtroRelatorio">Cliente</label>
-        <select id="filtroRelatorio"><option value="">Todos os clientes</option></select>
-      </div>
-      <div class="field">
-        <label for="filtroStatus">Situação</label>
-        <select id="filtroStatus">
-          <option value="">Todas as situações</option>
-          <option value="Pendente">Pendente</option>
-          <option value="Pago">Pago</option>
-          <option value="Não pago">Não pago</option>
-        </select>
-      </div>
+      <div class="field"><label for="filtroRelatorio">Cliente</label><select id="filtroRelatorio"><option value="">Todos os clientes</option></select></div>
+      <div class="field"><label for="filtroStatus">Situação</label><select id="filtroStatus"><option value="">Todas</option><option>Pendente</option><option>Pago</option><option>Não pago</option></select></div>
     </div>
     <div id="tabelaRelatorios"></div>
   </div>
@@ -250,420 +151,291 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 
 <section id="vencimentos" class="panel">
   <div class="card">
-    <h2>Controle de vencimentos</h2>
-    <p class="muted">Cheques que ainda não foram marcados como pagos, ordenados pelo vencimento.</p>
+    <h2>Vencimentos e renovações</h2>
+    <p class="muted">Renove por 30, 60 ou 90 dias. O valor original do cheque não aumenta. Registre os juros recebidos na renovação.</p>
     <div id="tabelaVencimentos"></div>
+  </div>
+  <div class="card"><h2>Histórico de renovações</h2><div id="historicoRenovacoes"></div></div>
+</section>
+
+<section id="devolvidos" class="panel">
+  <div class="card">
+    <h2>Cheques devolvidos / não pagos</h2>
+    <p class="muted">Cheques marcados como não pagos. Você pode atualizar a situação ou acessar os vencimentos para renovar.</p>
+    <div id="tabelaDevolvidos"></div>
   </div>
 </section>
 </main>
-<footer>Edeval-Cheques · Controle financeiro</footer>
+<footer>Edeval-Cheques · Protótipo em desenvolvimento</footer>
 
 <script>
-const STORAGE_KEY = 'edeval-cheques-v2';
-const STATUS_VALIDOS = ['Pendente','Pago','Não pago'];
-
-function dataLocalISO(){
-  const d = new Date();
-  const ano = d.getFullYear();
-  const mes = String(d.getMonth()+1).padStart(2,'0');
-  const dia = String(d.getDate()).padStart(2,'0');
-  return `${ano}-${mes}-${dia}`;
+const KEY='edeval-cheques-v2';
+const STATUS=['Pendente','Pago','Não pago'];
+function hoje(){
+ const d=new Date();
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-function mesLocalISO(){
-  return dataLocalISO().slice(0,7);
+function mesAtual(){return hoje().slice(0,7)}
+function idNovo(){return 'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9)}
+function dinheiro(n){return (Number(n)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dataBR(s){if(!s)return '—';const p=s.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:s}
+function diasEntre(a,b){if(!a||!b)return 0;return Math.max(0,Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/86400000))}
+function jurosCalculo(valor,taxa,dias){return Math.round(Math.max(0,Number(valor)||0)*Math.max(0,Number(taxa)||0)/100*Math.max(0,dias)/30*100)/100}
+function lerDados(){
+ try{
+  const d=JSON.parse(localStorage.getItem(KEY)||'{}');
+  return {
+   clientes:Array.isArray(d.clientes)?d.clientes:[],
+   cheques:Array.isArray(d.cheques)?d.cheques.map(c=>({...c,status:c.status==='Devolvido'?'Não pago':(STATUS.includes(c.status)?c.status:'Pendente'),valor:Number(c.valor)||0,juros:Number(c.juros)||0,dataOperacao:c.dataOperacao||hoje()})):[],
+   operacoes:Array.isArray(d.operacoes)?d.operacoes:[],
+   renovacoes:Array.isArray(d.renovacoes)?d.renovacoes:[]
+  };
+ }catch(e){return {clientes:[],cheques:[],operacoes:[],renovacoes:[]}}
 }
-function novoId(){
-  return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,9);
+let db=lerDados();
+function salvar(){
+ try{localStorage.setItem(KEY,JSON.stringify(db));return true}
+ catch(e){alert('Não foi possível salvar. O armazenamento do navegador pode estar cheio, especialmente por causa das fotos.');return false}
 }
-function carregarBanco(){
-  try{
-    const salvo = localStorage.getItem(STORAGE_KEY);
-    const db = salvo ? JSON.parse(salvo) : {};
-    return {
-      clientes:Array.isArray(db.clientes) ? db.clientes : [],
-      cheques:Array.isArray(db.cheques) ? db.cheques.map(c=>({
-        ...c,
-        status:STATUS_VALIDOS.includes(c.status) ? c.status : (c.status==='Devolvido' ? 'Não pago' : 'Pendente'),
-        taxa:Number(c.taxa)||0,
-        juros:Number(c.juros)||0,
-        valor:Number(c.valor)||0,
-        dataOperacao:c.dataOperacao||dataLocalISO()
-      })) : [],
-      operacoes:Array.isArray(db.operacoes) ? db.operacoes : []
-    };
-  }catch(e){
-    alert('Não foi possível ler os dados salvos neste navegador.');
-    return {clientes:[],cheques:[],operacoes:[]};
-  }
+function cliente(id){return db.clientes.find(c=>c.id===id)}
+function nomeCliente(id){return cliente(id)?.nome||'Cliente excluído'}
+function liquido(c){return Math.max(0,(Number(c.valor)||0)-(Number(c.juros)||0))}
+function statusTag(s){return `<span class="tag ${s==='Pago'?'pago':s==='Não pago'?'naopago':''}">${esc(s||'Pendente')}</span>`}
+function irAba(id){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+ document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+ if(id==='inicio')renderInicio();
+ if(id==='clientes')renderClientes();
+ if(id==='cheques')atualizarSelects();
+ if(id==='relatorios')renderRelatorios();
+ if(id==='vencimentos')renderVencimentos();
+ if(id==='devolvidos')renderDevolvidos();
 }
-let db = carregarBanco();
-
-function salvarBanco(){
-  try{
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(db));
-    return true;
-  }catch(e){
-    alert('O navegador não conseguiu salvar os dados. As fotos podem ocupar muito espaço. Tente imagens menores.');
-    return false;
-  }
-}
-const dinheiro = v => (Number(v)||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const escapar = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const clientePorId = id => db.clientes.find(c=>c.id===id);
-const diasEntre = (inicio,fim) => {
-  if(!inicio || !fim) return 0;
-  const a = new Date(inicio+'T12:00:00');
-  const b = new Date(fim+'T12:00:00');
-  return Math.max(0,Math.round((b-a)/86400000));
-};
-function calcularJuros(valor,taxa,dataOperacao,vencimento){
-  const dias = diasEntre(dataOperacao,vencimento);
-  return Math.round((Number(valor)||0)*(Number(taxa)||0)/100*dias/30*100)/100;
-}
-function valorLiquido(c){
-  return Math.max(0,Number(c.valor||0)-Number(c.juros||0));
-}
-function dataBR(s){
-  if(!s)return '—';
-  const p=s.split('-');
-  return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : s;
-}
-function clienteNome(id){
-  return clientePorId(id)?.nome || 'Cliente excluído';
-}
-function classeStatus(s){
-  return s==='Pago'?'pago':s==='Não pago'?'naopago':'';
-}
-function tagStatus(s){
-  return `<span class="tag ${classeStatus(s)}">${escapar(s||'Pendente')}</span>`;
-}
-function trocarAba(id){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
-  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
-  if(id==='inicio') renderInicio();
-  if(id==='clientes') renderClientes();
-  if(id==='cheques') atualizarSelectClientes();
-  if(id==='relatorios') renderRelatorios();
-  if(id==='vencimentos') renderVencimentos();
-}
-document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>trocarAba(b.dataset.tab)));
-
-document.getElementById('dataHoje').textContent = new Date().toLocaleDateString('pt-BR');
-document.getElementById('mesDashboard').value = mesLocalISO();
-document.getElementById('dataOperacao').value = dataLocalISO();
-
-function renderInicio(){
-  const mes=document.getElementById('mesDashboard').value||mesLocalISO();
-  const doMes=db.cheques.filter(c=>(c.dataOperacao||'').slice(0,7)===mes);
-  const capital=doMes.reduce((s,c)=>s+valorLiquido(c),0);
-  const juros=doMes.reduce((s,c)=>s+(Number(c.juros)||0),0);
-  const nominal=doMes.reduce((s,c)=>s+(Number(c.valor)||0),0);
-  document.getElementById('capitalMes').textContent=dinheiro(capital);
-  document.getElementById('lucroMes').textContent=dinheiro(juros);
-  document.getElementById('quantidadeMes').textContent=doMes.length;
-  document.getElementById('nominalMes').textContent=dinheiro(nominal);
-  document.getElementById('pendentesTotal').textContent=db.cheques.filter(c=>c.status==='Pendente').length;
-  document.getElementById('naoPagosTotal').textContent=db.cheques.filter(c=>c.status==='Não pago').length;
-  document.getElementById('pagosTotal').textContent=db.cheques.filter(c=>c.status==='Pago').length;
-  document.getElementById('clientesTotal').textContent=db.clientes.length;
-  const ultimos=[...db.cheques].sort((a,b)=>(b.dataOperacao||'').localeCompare(a.dataOperacao||'')).slice(0,6);
-  document.getElementById('ultimosCheques').innerHTML=ultimos.length?`
-    <div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor do cheque</th><th>Valor líquido</th><th>Vencimento</th><th>Situação</th></tr></thead><tbody>
-    ${ultimos.map(c=>`<tr><td>${escapar(clienteNome(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(valorLiquido(c))}</td><td>${dataBR(c.vencimento)}</td><td>${tagStatus(c.status)}</td></tr>`).join('')}
-    </tbody></table></div>`:'<div class="empty">Nenhum cheque registrado ainda.</div>';
-}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>irAba(b.dataset.tab));
+document.getElementById('dataHoje').textContent=new Date().toLocaleDateString('pt-BR');
+document.getElementById('mesDashboard').value=mesAtual();
+document.getElementById('dataOperacao').value=hoje();
 document.getElementById('mesDashboard').addEventListener('change',renderInicio);
 
-document.getElementById('formCliente').addEventListener('submit',e=>{
-  e.preventDefault();
-  const id=document.getElementById('clienteEditando').value;
-  const nome=document.getElementById('nomeCliente').value.trim();
-  const telefone=document.getElementById('telefoneCliente').value.trim();
-  const taxa=Number(document.getElementById('taxaCliente').value);
-  if(!nome){alert('Informe o nome do cliente.');return;}
-  const duplicado=db.clientes.find(c=>c.nome.toLocaleLowerCase()===nome.toLocaleLowerCase()&&c.id!==id);
-  if(duplicado&&!confirm('Já existe um cliente com esse nome. Deseja cadastrar mesmo assim?'))return;
-  if(id){
-    const c=clientePorId(id);
-    if(c)Object.assign(c,{nome,telefone,taxa});
-  }else{
-    db.clientes.push({id:novoId(),nome,telefone,taxa,criadoEm:dataLocalISO()});
-  }
-  salvarBanco();
-  limparFormularioCliente();
-  renderClientes();
-  atualizarSelectClientes();
-  renderInicio();
-});
-function limparFormularioCliente(){
-  document.getElementById('formCliente').reset();
-  document.getElementById('clienteEditando').value='';
-  document.getElementById('taxaCliente').value='2';
-  document.getElementById('tituloCliente').textContent='Cadastrar cliente';
-  document.getElementById('cancelarEdicao').hidden=true;
+function renderInicio(){
+ const mes=document.getElementById('mesDashboard').value||mesAtual();
+ const trocas=db.cheques.filter(c=>(c.dataOperacao||'').slice(0,7)===mes);
+ const jurosOriginais=trocas.reduce((s,c)=>s+(Number(c.juros)||0),0);
+ const jurosRenovacoes=db.renovacoes.filter(r=>(r.data||'').slice(0,7)===mes).reduce((s,r)=>s+(Number(r.juros)||0),0);
+ document.getElementById('capitalMes').textContent=dinheiro(trocas.reduce((s,c)=>s+liquido(c),0));
+ document.getElementById('lucroMes').textContent=dinheiro(jurosOriginais+jurosRenovacoes);
+ document.getElementById('quantidadeMes').textContent=trocas.length;
+ document.getElementById('nominalMes').textContent=dinheiro(trocas.reduce((s,c)=>s+(Number(c.valor)||0),0));
+ document.getElementById('pendentesTotal').textContent=db.cheques.filter(c=>c.status==='Pendente').length;
+ document.getElementById('naoPagosTotal').textContent=db.cheques.filter(c=>c.status==='Não pago').length;
+ document.getElementById('pagosTotal').textContent=db.cheques.filter(c=>c.status==='Pago').length;
+ document.getElementById('clientesTotal').textContent=db.clientes.length;
+ const ultimos=[...db.cheques].sort((a,b)=>(b.dataOperacao||'').localeCompare(a.dataOperacao||'')).slice(0,6);
+ document.getElementById('ultimosCheques').innerHTML=ultimos.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Cheque</th><th>Valor entregue</th><th>Vencimento</th><th>Situação</th></tr></thead><tbody>${ultimos.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(liquido(c))}</td><td>${dataBR(c.vencimento)}</td><td>${statusTag(c.status)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum cheque registrado.</div>';
 }
-document.getElementById('cancelarEdicao').addEventListener('click',limparFormularioCliente);
+
+document.getElementById('formCliente').addEventListener('submit',e=>{
+ e.preventDefault();
+ const id=document.getElementById('clienteEditando').value;
+ const nome=document.getElementById('nomeCliente').value.trim();
+ const telefone=document.getElementById('telefoneCliente').value.trim();
+ const taxa=Number(document.getElementById('taxaCliente').value);
+ if(!nome)return;
+ if(db.clientes.some(c=>c.nome.toLowerCase()===nome.toLowerCase()&&c.id!==id)&&!confirm('Já existe um cliente com esse nome. Deseja continuar?'))return;
+ if(id){const c=cliente(id);if(c)Object.assign(c,{nome,telefone,taxa})}
+ else db.clientes.push({id:idNovo(),nome,telefone,taxa});
+ if(!salvar())return;
+ limparCliente();renderClientes();atualizarSelects();renderInicio();
+});
+function limparCliente(){
+ document.getElementById('formCliente').reset();
+ document.getElementById('clienteEditando').value='';
+ document.getElementById('taxaCliente').value=2;
+ document.getElementById('tituloCliente').textContent='Cadastrar cliente';
+ document.getElementById('cancelarEdicao').hidden=true;
+}
+document.getElementById('cancelarEdicao').onclick=limparCliente;
 document.getElementById('buscarCliente').addEventListener('input',renderClientes);
 function editarCliente(id){
-  const c=clientePorId(id);if(!c)return;
-  document.getElementById('clienteEditando').value=c.id;
-  document.getElementById('nomeCliente').value=c.nome||'';
-  document.getElementById('telefoneCliente').value=c.telefone||'';
-  document.getElementById('taxaCliente').value=c.taxa??2;
-  document.getElementById('tituloCliente').textContent='Editar cliente';
-  document.getElementById('cancelarEdicao').hidden=false;
-  document.getElementById('nomeCliente').focus();
-  window.scrollTo({top:0,behavior:'smooth'});
+ const c=cliente(id);if(!c)return;
+ document.getElementById('clienteEditando').value=id;
+ document.getElementById('nomeCliente').value=c.nome;
+ document.getElementById('telefoneCliente').value=c.telefone||'';
+ document.getElementById('taxaCliente').value=c.taxa??2;
+ document.getElementById('tituloCliente').textContent='Editar cliente';
+ document.getElementById('cancelarEdicao').hidden=false;
+ window.scrollTo({top:0,behavior:'smooth'});
 }
 function excluirCliente(id){
-  if(db.cheques.some(c=>c.clienteId===id)){
-    alert('Este cliente possui cheques registrados. Para preservar o histórico, não é possível excluí-lo.');
-    return;
-  }
-  if(!confirm('Deseja excluir este cliente?'))return;
-  db.clientes=db.clientes.filter(c=>c.id!==id);
-  salvarBanco();renderClientes();atualizarSelectClientes();renderInicio();
+ if(db.cheques.some(c=>c.clienteId===id)){alert('Este cliente possui cheques. Não pode ser excluído para preservar o histórico.');return}
+ if(!confirm('Excluir este cliente?'))return;
+ db.clientes=db.clientes.filter(c=>c.id!==id);salvar();renderClientes();atualizarSelects();renderInicio();
 }
 function renderClientes(){
-  const busca=(document.getElementById('buscarCliente').value||'').toLocaleLowerCase();
-  const lista=db.clientes.filter(c=>(c.nome+' '+(c.telefone||'')).toLocaleLowerCase().includes(busca)).sort((a,b)=>a.nome.localeCompare(b.nome));
-  document.getElementById('listaClientes').innerHTML=lista.length?`
-  <div class="table-wrap"><table><thead><tr><th>Nome</th><th>Telefone</th><th>Taxa padrão</th><th>Cheques</th><th>Ações</th></tr></thead><tbody>
-  ${lista.map(c=>`<tr><td>${escapar(c.nome)}</td><td>${escapar(c.telefone||'—')}</td><td>${Number(c.taxa||0).toLocaleString('pt-BR')}%</td><td>${db.cheques.filter(x=>x.clienteId===c.id).length}</td><td><div class="actions"><button class="btn small secondary" onclick="editarCliente('${c.id}')">Editar</button><button class="btn small danger" onclick="excluirCliente('${c.id}')">Excluir</button></div></td></tr>`).join('')}
-  </tbody></table></div>`:'<div class="empty">Nenhum cliente encontrado. Cadastre o primeiro cliente acima.</div>';
+ const q=(document.getElementById('buscarCliente').value||'').toLowerCase();
+ const arr=db.clientes.filter(c=>(c.nome+' '+(c.telefone||'')).toLowerCase().includes(q)).sort((a,b)=>a.nome.localeCompare(b.nome));
+ document.getElementById('listaClientes').innerHTML=arr.length?`<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Telefone</th><th>Taxa</th><th>Cheques</th><th>Ações</th></tr></thead><tbody>${arr.map(c=>`<tr><td>${esc(c.nome)}</td><td>${esc(c.telefone||'—')}</td><td>${Number(c.taxa||0)}%</td><td>${db.cheques.filter(x=>x.clienteId===c.id).length}</td><td><div class="actions"><button class="btn small secondary" onclick="editarCliente('${c.id}')">Editar</button><button class="btn small danger" onclick="excluirCliente('${c.id}')">Excluir</button></div></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum cliente encontrado.</div>';
 }
-function atualizarSelectClientes(){
-  const sel=document.getElementById('clienteOperacao');
-  const atual=sel.value;
-  sel.innerHTML='<option value="">Selecione um cliente</option>'+db.clientes.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${c.id}">${escapar(c.nome)}</option>`).join('');
-  if(db.clientes.some(c=>c.id===atual))sel.value=atual;
-  const filtro=document.getElementById('filtroRelatorio');
-  const filtroAtual=filtro.value;
-  filtro.innerHTML='<option value="">Todos os clientes</option>'+db.clientes.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${c.id}">${escapar(c.nome)}</option>`).join('');
-  if(db.clientes.some(c=>c.id===filtroAtual))filtro.value=filtroAtual;
+function atualizarSelects(){
+ const csel=document.getElementById('clienteOperacao'),atual=csel.value;
+ csel.innerHTML='<option value="">Selecione um cliente</option>'+db.clientes.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+ if(db.clientes.some(c=>c.id===atual))csel.value=atual;
+ const f=document.getElementById('filtroRelatorio'),fv=f.value;
+ f.innerHTML='<option value="">Todos os clientes</option>'+db.clientes.slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(c=>`<option value="${c.id}">${esc(c.nome)}</option>`).join('');
+ if(db.clientes.some(c=>c.id===fv))f.value=fv;
 }
 document.getElementById('clienteOperacao').addEventListener('change',()=>{
-  const c=clientePorId(document.getElementById('clienteOperacao').value);
-  if(c)document.getElementById('taxaOperacao').value=c.taxa??2;
-  recalcularResumo();
+ const c=cliente(document.getElementById('clienteOperacao').value);
+ if(c)document.getElementById('taxaOperacao').value=c.taxa??2;
+ recalcular();
 });
 
-let contadorChequeNovo=0;
-function adicionarChequeNovo(){
-  contadorChequeNovo++;
-  const id='novo-'+contadorChequeNovo;
-  const el=document.createElement('div');
-  el.className='cheque-box';
-  el.dataset.id=id;
-  el.innerHTML=`
-    <h3><span>Cheque ${contadorChequeNovo}</span><button type="button" class="btn small danger removerCheque">Remover</button></h3>
-    <div class="form-grid">
-      <div class="field"><label>Valor do cheque (R$) *</label><input class="valorCheque" type="number" min="0.01" step="0.01" required placeholder="1000,00"></div>
-      <div class="field"><label>Data de vencimento *</label><input class="vencCheque" type="date" required></div>
-      <div class="field"><label>Foto da frente (opcional)</label><input class="frenteCheque" type="file" accept="image/*" capture="environment"></div>
-      <div class="field"><label>Foto do verso (opcional)</label><input class="versoCheque" type="file" accept="image/*" capture="environment"></div>
-    </div>
-    <div class="photo-preview"></div>
-    <div class="muted calculoCheque">Informe o valor e o vencimento para calcular os juros.</div>`;
-  document.getElementById('listaChequesNovos').appendChild(el);
-  el.querySelector('.removerCheque').addEventListener('click',()=>{el.remove();recalcularResumo();});
-  el.querySelectorAll('.valorCheque,.vencCheque').forEach(i=>i.addEventListener('input',recalcularResumo));
-  el.querySelectorAll('input[type=file]').forEach(i=>i.addEventListener('change',async()=>{
-    const file=i.files[0];if(!file)return;
-    const img=await comprimirImagem(file);
-    i.dataset.imagem=img;
-    const preview=el.querySelector('.photo-preview');
-    preview.innerHTML='';
-    ['.frenteCheque','.versoCheque'].forEach(sel=>{
-      const inp=el.querySelector(sel);
-      if(inp.dataset.imagem){
-        const im=document.createElement('img');im.src=inp.dataset.imagem;im.alt=sel.includes('frente')?'Frente do cheque':'Verso do cheque';preview.appendChild(im);
-      }
-    });
-  }));
-  recalcularResumo();
+let contador=0;
+function adicionarCheque(){
+ const id='c'+(++contador),el=document.createElement('div');
+ el.className='cheque-box';el.dataset.id=id;
+ el.innerHTML=`<h3><span>Cheque ${contador}</span><button type="button" class="btn small danger remover">Remover</button></h3>
+ <div class="form-grid">
+ <div class="field"><label>Valor do cheque (R$) *</label><input class="valor" type="number" min="0.01" step="0.01" required></div>
+ <div class="field"><label>Vencimento *</label><input class="venc" type="date" required></div>
+ <div class="field"><label>Foto da frente (opcional)</label><input class="frente" type="file" accept="image/*" capture="environment"></div>
+ <div class="field"><label>Foto do verso (opcional)</label><input class="verso" type="file" accept="image/*" capture="environment"></div></div>
+ <div class="photo-preview"></div><p class="muted calculo">Informe o valor e vencimento.</p>`;
+ document.getElementById('listaChequesNovos').appendChild(el);
+ el.querySelector('.remover').onclick=()=>{el.remove();recalcular()};
+ el.querySelectorAll('.valor,.venc').forEach(i=>i.addEventListener('input',recalcular));
+ el.querySelectorAll('input[type=file]').forEach(i=>i.addEventListener('change',async()=>{
+  if(!i.files[0])return;
+  try{i.dataset.imagem=await comprimir(i.files[0]);const p=el.querySelector('.photo-preview');p.innerHTML='';
+   ['.frente','.verso'].forEach(sel=>{const inp=el.querySelector(sel);if(inp.dataset.imagem){const im=document.createElement('img');im.src=inp.dataset.imagem;p.appendChild(im)}});
+  }catch(e){alert('Não foi possível carregar essa foto.')}
+ }));
+ recalcular();
 }
-function comprimirImagem(file){
-  return new Promise((resolve,reject)=>{
-    if(!file.type.startsWith('image/')){reject(new Error('Arquivo inválido'));return;}
-    const reader=new FileReader();
-    reader.onerror=()=>reject(new Error('Não foi possível ler a imagem'));
-    reader.onload=()=>{
-      const img=new Image();
-      img.onerror=()=>reject(new Error('Imagem inválida'));
-      img.onload=()=>{
-        const max=1000;
-        const escala=Math.min(1,max/Math.max(img.width,img.height));
-        const canvas=document.createElement('canvas');
-        canvas.width=Math.max(1,Math.round(img.width*escala));
-        canvas.height=Math.max(1,Math.round(img.height*escala));
-        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
-        resolve(canvas.toDataURL('image/jpeg',0.68));
-      };
-      img.src=reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
+function comprimir(file){
+ return new Promise((resolve,reject)=>{
+  const r=new FileReader();r.onerror=reject;r.onload=()=>{
+   const im=new Image();im.onerror=reject;im.onload=()=>{
+    const escala=Math.min(1,900/Math.max(im.width,im.height)),can=document.createElement('canvas');
+    can.width=Math.max(1,Math.round(im.width*escala));can.height=Math.max(1,Math.round(im.height*escala));
+    can.getContext('2d').drawImage(im,0,0,can.width,can.height);resolve(can.toDataURL('image/jpeg',0.65));
+   };im.src=r.result;
+  };r.readAsDataURL(file);
+ });
 }
-function chequesDoFormulario(){
-  const data=document.getElementById('dataOperacao').value;
-  const taxa=Number(document.getElementById('taxaOperacao').value)||0;
-  return [...document.querySelectorAll('.cheque-box')].map(el=>{
-    const valor=Number(el.querySelector('.valorCheque').value)||0;
-    const vencimento=el.querySelector('.vencCheque').value;
-    const juros=calcularJuros(valor,taxa,data,vencimento);
-    return {valor,vencimento,juros,liquido:valor-juros};
-  });
+function recalcular(){
+ const data=document.getElementById('dataOperacao').value,taxa=Number(document.getElementById('taxaOperacao').value)||0;
+ let total=0,juros=0;
+ document.querySelectorAll('.cheque-box').forEach(el=>{
+  const valor=Number(el.querySelector('.valor').value)||0,venc=el.querySelector('.venc').value;
+  const dias=diasEntre(data,venc),j=jurosCalculo(valor,taxa,dias);total+=valor;juros+=j;
+  el.querySelector('.calculo').textContent=valor>0&&venc?`${dias} dias · Juros: ${dinheiro(j)} · Valor entregue: ${dinheiro(valor-j)}`:'Informe o valor e vencimento.';
+ });
+ document.getElementById('resumoNominal').textContent=dinheiro(total);
+ document.getElementById('resumoJuros').textContent=dinheiro(juros);
+ document.getElementById('resumoLiquido').textContent=dinheiro(Math.max(0,total-juros));
 }
-function recalcularResumo(){
-  const data=document.getElementById('dataOperacao').value;
-  const taxa=Number(document.getElementById('taxaOperacao').value)||0;
-  let nominal=0,jurosTotal=0;
-  document.querySelectorAll('.cheque-box').forEach(el=>{
-    const valor=Number(el.querySelector('.valorCheque').value)||0;
-    const venc=el.querySelector('.vencCheque').value;
-    const juros=calcularJuros(valor,taxa,data,venc);
-    nominal+=valor;jurosTotal+=juros;
-    const dias=diasEntre(data,venc);
-    el.querySelector('.calculoCheque').textContent=valor>0&&venc
-      ? `${dias} dias · Juros: ${dinheiro(juros)} · Valor líquido: ${dinheiro(Math.max(0,valor-juros))}`
-      : 'Informe o valor e o vencimento para calcular os juros.';
-  });
-  document.getElementById('resumoNominal').textContent=dinheiro(nominal);
-  document.getElementById('resumoJuros').textContent=dinheiro(jurosTotal);
-  document.getElementById('resumoLiquido').textContent=dinheiro(Math.max(0,nominal-jurosTotal));
-}
-document.getElementById('adicionarCheque').addEventListener('click',adicionarChequeNovo);
-document.getElementById('dataOperacao').addEventListener('change',recalcularResumo);
-document.getElementById('taxaOperacao').addEventListener('input',recalcularResumo);
-document.getElementById('limparOperacao').addEventListener('click',()=>{
-  if(!confirm('Limpar os dados desta operação?'))return;
-  document.getElementById('formOperacao').reset();
-  document.getElementById('dataOperacao').value=dataLocalISO();
-  document.getElementById('taxaOperacao').value='2';
-  document.getElementById('listaChequesNovos').innerHTML='';
-  contadorChequeNovo=0;adicionarChequeNovo();recalcularResumo();
-});
-document.getElementById('formOperacao').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const clienteId=document.getElementById('clienteOperacao').value;
-  const dataOperacao=document.getElementById('dataOperacao').value;
-  const taxa=Number(document.getElementById('taxaOperacao').value);
-  const caixas=[...document.querySelectorAll('.cheque-box')];
-  if(!clientePorId(clienteId)){alert('Selecione um cliente cadastrado.');return;}
-  if(!dataOperacao){alert('Informe a data da troca.');return;}
-  if(!caixas.length){alert('Adicione pelo menos um cheque.');return;}
-  for(const el of caixas){
-    const valor=Number(el.querySelector('.valorCheque').value);
-    const venc=el.querySelector('.vencCheque').value;
-    if(valor<=0||!venc){alert('Preencha o valor e o vencimento de todos os cheques.');return;}
-    if(venc<dataOperacao){if(!confirm('Há um cheque com vencimento anterior à data da troca. Deseja continuar?'))return;}
-    if(calcularJuros(valor,taxa,dataOperacao,venc)>=valor){alert('Os juros de um cheque são iguais ou maiores que o valor dele. Confira a taxa e o vencimento.');return;}
-  }
-  const operacaoId=novoId();
-  const novos=[];
-  for(const el of caixas){
-    const valor=Number(el.querySelector('.valorCheque').value);
-    const vencimento=el.querySelector('.vencCheque').value;
-    const frente=el.querySelector('.frenteCheque').dataset.imagem||'';
-    const verso=el.querySelector('.versoCheque').dataset.imagem||'';
-    novos.push({
-      id:novoId(),operacaoId,clienteId,valor,vencimento,dataOperacao,taxa,
-      juros:calcularJuros(valor,taxa,dataOperacao,vencimento),
-      status:'Pendente',frente,verso
-    });
-  }
-  const novaOperacao={id:operacaoId,clienteId,dataOperacao,taxa,cheques:novos.map(c=>c.id)};
-  db.cheques.push(...novos);db.operacoes.push(novaOperacao);
-  if(!salvarBanco()){
-    db.cheques=db.cheques.filter(c=>c.operacaoId!==operacaoId);
-    db.operacoes=db.operacoes.filter(o=>o.id!==operacaoId);
-    return;
-  }
-  alert(`Troca registrada!\nCapital entregue: ${dinheiro(novos.reduce((s,c)=>s+valorLiquido(c),0))}\nJuros descontados: ${dinheiro(novos.reduce((s,c)=>s+c.juros,0))}`);
-  document.getElementById('formOperacao').reset();
-  document.getElementById('dataOperacao').value=dataLocalISO();
-  document.getElementById('taxaOperacao').value='2';
-  document.getElementById('listaChequesNovos').innerHTML='';
-  contadorChequeNovo=0;adicionarChequeNovo();recalcularResumo();
-  renderInicio();renderRelatorios();renderVencimentos();
-  trocarAba('relatorios');
+document.getElementById('adicionarCheque').onclick=adicionarCheque;
+document.getElementById('dataOperacao').addEventListener('change',recalcular);
+document.getElementById('taxaOperacao').addEventListener('input',recalcular);
+document.getElementById('limparOperacao').onclick=()=>{
+ if(!confirm('Limpar esta operação?'))return;
+ document.getElementById('formOperacao').reset();
+ document.getElementById('dataOperacao').value=hoje();document.getElementById('taxaOperacao').value=2;
+ document.getElementById('listaChequesNovos').innerHTML='';contador=0;adicionarCheque();recalcular();
+};
+document.getElementById('formOperacao').addEventListener('submit',e=>{
+ e.preventDefault();
+ const clienteId=document.getElementById('clienteOperacao').value;
+ const data=document.getElementById('dataOperacao').value,taxa=Number(document.getElementById('taxaOperacao').value);
+ const caixas=[...document.querySelectorAll('.cheque-box')];
+ if(!cliente(clienteId)){alert('Selecione um cliente.');return}
+ if(!caixas.length){alert('Adicione pelo menos um cheque.');return}
+ for(const el of caixas){
+  const v=Number(el.querySelector('.valor').value),d=el.querySelector('.venc').value;
+  if(v<=0||!d){alert('Preencha o valor e vencimento de todos os cheques.');return}
+  if(jurosCalculo(v,taxa,diasEntre(data,d))>=v){alert('Os juros não podem ser iguais ou maiores que o valor do cheque.');return}
+ }
+ const op=idNovo(),novos=caixas.map(el=>{
+  const valor=Number(el.querySelector('.valor').value),vencimento=el.querySelector('.venc').value;
+  return {id:idNovo(),operacaoId:op,clienteId,valor,vencimento,dataOperacao:data,taxa,
+   juros:jurosCalculo(valor,taxa,diasEntre(data,vencimento)),status:'Pendente',
+   frente:el.querySelector('.frente').dataset.imagem||'',verso:el.querySelector('.verso').dataset.imagem||'',historicoRenovacoes:[]};
+ });
+ db.cheques.push(...novos);db.operacoes.push({id:op,clienteId,dataOperacao:data,taxa,cheques:novos.map(c=>c.id)});
+ if(!salvar()){db.cheques=db.cheques.filter(c=>c.operacaoId!==op);db.operacoes=db.operacoes.filter(o=>o.id!==op);return}
+ alert(`Troca registrada!\nCapital entregue: ${dinheiro(novos.reduce((s,c)=>s+liquido(c),0))}\nJuros descontados: ${dinheiro(novos.reduce((s,c)=>s+c.juros,0))}`);
+ document.getElementById('formOperacao').reset();document.getElementById('dataOperacao').value=hoje();document.getElementById('taxaOperacao').value=2;
+ document.getElementById('listaChequesNovos').innerHTML='';contador=0;adicionarCheque();recalcular();
+ renderTudo();irAba('relatorios');
 });
 
 function alterarStatus(id,status){
-  if(!STATUS_VALIDOS.includes(status))return;
-  const c=db.cheques.find(x=>x.id===id);if(!c)return;
-  c.status=status;
-  salvarBanco();renderInicio();renderRelatorios();renderVencimentos();
+ if(!STATUS.includes(status))return;
+ const c=db.cheques.find(x=>x.id===id);if(!c)return;
+ c.status=status;
+ salvar();renderTudo();
+}
+function statusSelect(c){
+ return `<select aria-label="Situação do cheque" onchange="alterarStatus('${c.id}',this.value)">${STATUS.map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}</select>`;
 }
 function renderRelatorios(){
-  const cliente=document.getElementById('filtroRelatorio').value;
-  const status=document.getElementById('filtroStatus').value;
-  const lista=[...db.cheques].filter(c=>(!cliente||c.clienteId===cliente)&&(!status||c.status===status))
-    .sort((a,b)=>(b.dataOperacao||'').localeCompare(a.dataOperacao||''));
-  if(!lista.length){document.getElementById('tabelaRelatorios').innerHTML='<div class="empty">Nenhuma movimentação encontrada.</div>';return;}
-  document.getElementById('tabelaRelatorios').innerHTML=`
-  <div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Data da troca</th><th>Valor do cheque</th><th>Juros</th><th>Valor entregue</th><th>Vencimento</th><th>Situação</th><th>Detalhes</th></tr></thead><tbody>
-  ${lista.map(c=>`<tr>
-    <td>${escapar(clienteNome(c.clienteId))}</td>
-    <td>${dataBR(c.dataOperacao)}</td>
-    <td>${dinheiro(c.valor)}</td>
-    <td>${dinheiro(c.juros)}</td>
-    <td><strong>${dinheiro(valorLiquido(c))}</strong></td>
-    <td>${dataBR(c.vencimento)}</td>
-    <td><select aria-label="Situação do cheque" onchange="alterarStatus('${c.id}',this.value)">
-      ${STATUS_VALIDOS.map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}
-    </select></td>
-    <td><button class="btn small secondary" onclick="verCheque('${c.id}')">Ver</button></td>
-  </tr>`).join('')}
-  </tbody></table></div>
-  <p class="muted">Exibindo ${lista.length} cheque(s). Os juros são calculados na data da troca; a situação do cheque pode ser atualizada na lista.</p>`;
+ const cli=document.getElementById('filtroRelatorio').value,st=document.getElementById('filtroStatus').value;
+ const lista=[...db.cheques].filter(c=>(!cli||c.clienteId===cli)&&(!st||c.status===st)).sort((a,b)=>(b.dataOperacao||'').localeCompare(a.dataOperacao||''));
+ document.getElementById('tabelaRelatorios').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Troca</th><th>Cheque</th><th>Juros iniciais</th><th>Valor entregue</th><th>Vencimento</th><th>Situação</th><th>Detalhes</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dataBR(c.dataOperacao)}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(c.juros)}</td><td><b>${dinheiro(liquido(c))}</b></td><td>${dataBR(c.vencimento)}</td><td>${statusSelect(c)}</td><td><button class="btn small secondary" onclick="verCheque('${c.id}')">Ver</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum cheque encontrado.</div>';
 }
-document.getElementById('filtroRelatorio').addEventListener('change',renderRelatorios);
-document.getElementById('filtroStatus').addEventListener('change',renderRelatorios);
+document.getElementById('filtroRelatorio').onchange=renderRelatorios;
+document.getElementById('filtroStatus').onchange=renderRelatorios;
 
+function renovarCheque(id,dias){
+ const c=db.cheques.find(x=>x.id===id);if(!c)return;
+ if(c.status==='Pago'){alert('Este cheque já está marcado como pago.');return}
+ const taxa=Number(c.taxa)||0;
+ const juros=jurosCalculo(c.valor,taxa,dias);
+ const novaData=new Date(hoje()+'T12:00:00');novaData.setDate(novaData.getDate()+dias);
+ const novoVencimento=`${novaData.getFullYear()}-${String(novaData.getMonth()+1).padStart(2,'0')}-${String(novaData.getDate()).padStart(2,'0')}`;
+ const confirmar=confirm(`Renovar cheque de ${nomeCliente(c.clienteId)}?\n\nValor original: ${dinheiro(c.valor)}\nPrazo: ${dias} dias\nTaxa mensal: ${taxa}%\nJuros a receber agora: ${dinheiro(juros)}\nNovo vencimento: ${dataBR(novoVencimento)}\n\nO valor original do cheque permanecerá igual. Confirme somente se os juros foram recebidos.`);
+ if(!confirmar)return;
+ const registro={id:idNovo(),chequeId:c.id,clienteId:c.clienteId,data:hoje(),dias,taxa,juros,vencimentoAnterior:c.vencimento,novoVencimento,valorOriginal:c.valor};
+ db.renovacoes.push(registro);
+ c.historicoRenovacoes=c.historicoRenovacoes||[];c.historicoRenovacoes.push(registro.id);
+ c.vencimento=novoVencimento;c.status='Pendente';
+ if(!salvar()){db.renovacoes=db.renovacoes.filter(r=>r.id!==registro.id);c.vencimento=registro.vencimentoAnterior;return}
+ alert(`Renovação registrada.\nJuros recebidos: ${dinheiro(juros)}\nO cheque continua no valor original de ${dinheiro(c.valor)}.`);
+ renderTudo();
+}
 function renderVencimentos(){
-  const hoje=dataLocalISO();
-  const lista=db.cheques.filter(c=>c.status!=='Pago').sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
-  document.getElementById('tabelaVencimentos').innerHTML=lista.length?`
-  <div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor do cheque</th><th>Vencimento</th><th>Situação</th><th>Prazo</th><th>Alterar situação</th></tr></thead><tbody>
-  ${lista.map(c=>{
-    const atrasado=c.vencimento<hoje;
-    return `<tr><td>${escapar(clienteNome(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dataBR(c.vencimento)}</td><td>${tagStatus(c.status)}</td><td>${atrasado?'<span class="tag naopago">Vencido</span>':c.vencimento===hoje?'<span class="tag">Vence hoje</span>':'A vencer'}</td><td><select aria-label="Situação do cheque" onchange="alterarStatus('${c.id}',this.value)">${STATUS_VALIDOS.map(s=>`<option value="${s}" ${c.status===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`;
-  }).join('')}
-  </tbody></table></div>`:'<div class="empty">Não há cheques aguardando recebimento.</div>';
+ const h=hoje(),lista=db.cheques.filter(c=>c.status!=='Pago').sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
+ document.getElementById('tabelaVencimentos').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor original</th><th>Vencimento atual</th><th>Situação</th><th>Renovar</th><th>Ações</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dataBR(c.vencimento)} ${c.vencimento<h?'<span class="tag naopago">Vencido</span>':''}</td><td>${statusTag(c.status)}</td><td><div class="actions"><button class="btn small" onclick="renovarCheque('${c.id}',30)">30 dias</button><button class="btn small" onclick="renovarCheque('${c.id}',60)">60 dias</button><button class="btn small" onclick="renovarCheque('${c.id}',90)">90 dias</button></div></td><td>${statusSelect(c)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Não há cheques aguardando recebimento.</div>';
+ const renovacoes=[...db.renovacoes].sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+ document.getElementById('historicoRenovacoes').innerHTML=renovacoes.length?`<div class="table-wrap"><table><thead><tr><th>Data</th><th>Cliente</th><th>Valor original</th><th>Prazo</th><th>Juros recebidos</th><th>Vencimento anterior</th><th>Novo vencimento</th></tr></thead><tbody>${renovacoes.map(r=>`<tr><td>${dataBR(r.data)}</td><td>${esc(nomeCliente(r.clienteId))}</td><td>${dinheiro(r.valorOriginal)}</td><td>${r.dias} dias</td><td>${dinheiro(r.juros)}</td><td>${dataBR(r.vencimentoAnterior)}</td><td>${dataBR(r.novoVencimento)}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhuma renovação registrada.</div>';
+}
+function renderDevolvidos(){
+ const lista=db.cheques.filter(c=>c.status==='Não pago').sort((a,b)=>(a.vencimento||'').localeCompare(b.vencimento||''));
+ document.getElementById('tabelaDevolvidos').innerHTML=lista.length?`<div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Valor original</th><th>Juros iniciais</th><th>Vencimento</th><th>Situação</th><th>Opções</th></tr></thead><tbody>${lista.map(c=>`<tr><td>${esc(nomeCliente(c.clienteId))}</td><td>${dinheiro(c.valor)}</td><td>${dinheiro(c.juros)}</td><td>${dataBR(c.vencimento)}</td><td>${statusSelect(c)}</td><td><button class="btn small" onclick="irAba('vencimentos')">Ver renovação</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Não há cheques marcados como não pagos.</div>';
 }
 function verCheque(id){
-  const c=db.cheques.find(x=>x.id===id);if(!c)return;
-  const fotos=[
-    c.frente?`<div><h3>Frente</h3><img src="${c.frente}" style="max-width:100%;max-height:420px"></div>`:'',
-    c.verso?`<div><h3>Verso</h3><img src="${c.verso}" style="max-width:100%;max-height:420px"></div>`:''
-  ].join('');
-  const w=window.open('','_blank');
-  if(!w){alert('Permita a abertura de janelas para visualizar os detalhes.');return;}
-  w.document.write(`<!DOCTYPE html><html lang="pt-BR"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Detalhes do cheque</title><body style="font-family:Arial,sans-serif;max-width:900px;margin:25px auto;padding:15px;color:#182334"><h1>Detalhes do cheque</h1><p><b>Cliente:</b> ${escapar(clienteNome(c.clienteId))}</p><p><b>Valor nominal:</b> ${dinheiro(c.valor)}</p><p><b>Juros descontados:</b> ${dinheiro(c.juros)}</p><p><b>Valor entregue:</b> ${dinheiro(valorLiquido(c))}</p><p><b>Taxa mensal:</b> ${Number(c.taxa||0)}%</p><p><b>Data da troca:</b> ${dataBR(c.dataOperacao)}</p><p><b>Vencimento:</b> ${dataBR(c.vencimento)}</p><p><b>Situação:</b> ${escapar(c.status)}</p><hr>${fotos||'<p>Nenhuma foto foi anexada a este cheque.</p>'}</body></html>`);
-  w.document.close();
+ const c=db.cheques.find(x=>x.id===id);if(!c)return;
+ const w=window.open('','_blank');if(!w){alert('Permita janelas pop-up para ver os detalhes.');return}
+ const fotos=(c.frente?`<h3>Frente</h3><img style="max-width:100%;max-height:400px" src="${c.frente}">`:'')+(c.verso?`<h3>Verso</h3><img style="max-width:100%;max-height:400px" src="${c.verso}">`:'');
+ const hist=(c.historicoRenovacoes||[]).map(rid=>db.renovacoes.find(r=>r.id===rid)).filter(Boolean);
+ w.document.write(`<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Detalhes do cheque</title><body style="font-family:Arial;max-width:850px;margin:25px auto;padding:15px"><h1>Detalhes do cheque</h1><p><b>Cliente:</b> ${esc(nomeCliente(c.clienteId))}</p><p><b>Valor original:</b> ${dinheiro(c.valor)}</p><p><b>Juros iniciais:</b> ${dinheiro(c.juros)}</p><p><b>Valor entregue inicialmente:</b> ${dinheiro(liquido(c))}</p><p><b>Taxa mensal:</b> ${c.taxa}%</p><p><b>Data da troca:</b> ${dataBR(c.dataOperacao)}</p><p><b>Vencimento atual:</b> ${dataBR(c.vencimento)}</p><p><b>Situação:</b> ${esc(c.status)}</p><h2>Renovações</h2>${hist.length?hist.map(r=>`<p>${dataBR(r.data)} · ${r.dias} dias · Juros recebidos: ${dinheiro(r.juros)} · Novo vencimento: ${dataBR(r.novoVencimento)}</p>`).join(''):'<p>Nenhuma renovação.</p>'}<hr>${fotos||'<p>Nenhuma foto anexada.</p>'}</body></html>`);
+ w.document.close();
 }
 function exportarCSV(){
-  const linhas=[['Cliente','Data da troca','Valor nominal','Taxa mensal (%)','Juros descontados','Valor entregue','Vencimento','Situação']];
-  db.cheques.forEach(c=>linhas.push([
-    clienteNome(c.clienteId),c.dataOperacao,c.valor,c.taxa,c.juros,valorLiquido(c),c.vencimento,c.status
-  ]));
-  const csv='\uFEFF'+linhas.map(l=>l.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='relatorio-edeval-cheques.csv';a.click();
-  URL.revokeObjectURL(url);
+ const linhas=[['Cliente','Data da troca','Valor original','Taxa mensal','Juros iniciais','Valor entregue','Vencimento atual','Situação','Quantidade de renovações','Juros recebidos em renovações']];
+ db.cheques.forEach(c=>{
+  const rs=db.renovacoes.filter(r=>r.chequeId===c.id);
+  linhas.push([nomeCliente(c.clienteId),c.dataOperacao,c.valor,c.taxa,c.juros,liquido(c),c.vencimento,c.status,rs.length,rs.reduce((s,r)=>s+r.juros,0)]);
+ });
+ const csv='\uFEFF'+linhas.map(l=>l.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
+ const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ const a=document.createElement('a');a.href=url;a.download='relatorio-edeval-cheques.csv';a.click();URL.revokeObjectURL(url);
 }
-document.getElementById('exportarCSV').addEventListener('click',exportarCSV);
-
-atualizarSelectClientes();
-adicionarChequeNovo();
-renderClientes();
-renderInicio();
-renderRelatorios();
-renderVencimentos();
-recalcularResumo();
+document.getElementById('exportarCSV').onclick=exportarCSV;
+function renderTudo(){renderInicio();renderRelatorios();renderVencimentos();renderDevolvidos();renderClientes();atualizarSelects()}
+atualizarSelects();adicionarCheque();renderTudo();recalcular();
 </script>
 </body>
 </html>
